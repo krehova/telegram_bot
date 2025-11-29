@@ -10,7 +10,7 @@ from flask import Flask, request
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 RAILWAY_DOMAIN = os.getenv("RAILWAY_PUBLIC_DOMAIN", "").rstrip("/")
 PORT = int(os.environ.get("PORT", 5000))
-ADMIN_ID = 1420675874  # <-- your Telegram ID
+ADMIN_ID = 1420675874  # admin Telegram ID
 
 if not BOT_TOKEN or not RAILWAY_DOMAIN:
     raise ValueError("BOT_TOKEN or RAILWAY_PUBLIC_DOMAIN not set!")
@@ -26,7 +26,7 @@ app = Flask(__name__)
 #       DATABASE SETUP
 # ============================
 
-DB_FILE = "database.db"
+DB_FILE = "/data/database.db"  # Persistent storage directory
 
 def init_db():
     conn = sqlite3.connect(DB_FILE)
