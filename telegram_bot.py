@@ -27,6 +27,8 @@ app = Flask(__name__)
 # ============================
 
 DB_FILE = "/data/database.db"  # Persistent storage directory
+# Make sure the directory exists
+os.makedirs(os.path.dirname(DB_FILE), exist_ok=True)
 
 def init_db():
     conn = sqlite3.connect(DB_FILE)
