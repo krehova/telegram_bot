@@ -24,8 +24,8 @@ if not BOT_TOKEN or not WEBHOOK_URL:
 #PORT = int(os.environ.get("PORT", 5000))
 #ADMIN_ID = 1420675874  # admin Telegram ID
 
-if not BOT_TOKEN or not RAILWAY_DOMAIN:
-    raise ValueError("BOT_TOKEN or RAILWAY_PUBLIC_DOMAIN not set!")
+#if not BOT_TOKEN or not RAILWAY_DOMAIN:
+#   raise ValueError("BOT_TOKEN or RAILWAY_PUBLIC_DOMAIN not set!")
 
 # ============================
 #       TELEBOT & FLASK
