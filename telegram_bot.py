@@ -1,16 +1,28 @@
+
 import os
 import sqlite3
 import telebot
 from flask import Flask, request
 
+# works for render
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+WEBHOOK_URL = os.getenv("WEBHOOK_URL", "").rstrip("/")
+PORT = int(os.environ.get("PORT", 10000))
+ADMIN_ID = 1420675874
+
+if not BOT_TOKEN or not WEBHOOK_URL:
+    raise ValueError("BOT_TOKEN or WEBHOOK_URL not set!")
+
+
 # ============================
 #  ENVIRONMENT VARIABLES
+#  works for railway
 # ============================
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")
-RAILWAY_DOMAIN = os.getenv("RAILWAY_PUBLIC_DOMAIN", "").rstrip("/")
-PORT = int(os.environ.get("PORT", 5000))
-ADMIN_ID = 1420675874  # admin Telegram ID
+#BOT_TOKEN = os.getenv("BOT_TOKEN")
+#RAILWAY_DOMAIN = os.getenv("RAILWAY_PUBLIC_DOMAIN", "").rstrip("/")
+#PORT = int(os.environ.get("PORT", 5000))
+#ADMIN_ID = 1420675874  # admin Telegram ID
 
 if not BOT_TOKEN or not RAILWAY_DOMAIN:
     raise ValueError("BOT_TOKEN or RAILWAY_PUBLIC_DOMAIN not set!")
@@ -26,8 +38,12 @@ app = Flask(__name__)
 #       DATABASE SETUP
 # ============================
 
-DB_FILE = "/data/database.db"  # Persistent storage directory
+#railway setup
+#DB_FILE = "/data/database.db"  # Persistent storage directory
 # Make sure the directory exists
+#os.makedirs(os.path.dirname(DB_FILE), exist_ok=True)
+
+DB_FILE = os.getenv("DB_FILE", "/var/data/database.db")
 os.makedirs(os.path.dirname(DB_FILE), exist_ok=True)
 
 def init_db():
@@ -165,7 +181,8 @@ def webhook():
 # ============================
 
 bot.remove_webhook()
-bot.set_webhook(url=f"{RAILWAY_DOMAIN}/webhook")
+bot.set_webhook(url=f"{WEBHOOK_URL}/webhook")
+#bot.set_webhook(url=f"{RAILWAY_DOMAIN}/webhook")
 
 # ============================
 #        RUN APP
@@ -173,3 +190,7 @@ bot.set_webhook(url=f"{RAILWAY_DOMAIN}/webhook")
 
 # Don't use app.run() in production on Railway; use Gunicorn
 # Command: gunicorn main:app -b 0.0.0.0:$PORT
+
+@app.route("/", methods=["GET"])
+def health():
+    return "Bot is running", 200
